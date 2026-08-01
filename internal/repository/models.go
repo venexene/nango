@@ -5,20 +5,20 @@
 package repository
 
 import (
-	"time"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Click struct {
-	ID        int64     `json:"id"`
-	LinkID    int32     `json:"link_id"`
-	UserAgent string    `json:"user_agent"`
-	Ip        string    `json:"ip"`
-	ClickedAt time.Time `json:"clicked_at"`
+	ID        int64            `json:"id"`
+	LinkID    int32            `json:"link_id"`
+	UserAgent string           `json:"user_agent"`
+	Ip        string           `json:"ip"`
+	ClickedAt pgtype.Timestamp `json:"clicked_at"`
 }
 
 type Link struct {
-	ID          int32     `json:"id"`
-	ShortCode   string    `json:"short_code"`
-	OriginalUrl string    `json:"original_url"`
-	CreatedAt   time.Time `json:"created_at"`
+	ID          int32            `json:"id"`
+	ShortCode   string           `json:"short_code"`
+	OriginalUrl string           `json:"original_url"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
 }

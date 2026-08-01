@@ -5,6 +5,7 @@ sql:
     queries: "internal/repository/queries.sql"
     gen:
       go:
+        sql_package: "pgx/v5"
         package: "repository"
         out: "internal/repository"
         emit_interface: true

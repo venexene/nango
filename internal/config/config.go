@@ -11,19 +11,25 @@ import (
 
 type Config struct {
 	HTTPPort       string
+	LogFormat	   string
+	BaseURL        string
 	DBHost         string
 	DBPort         string
 	DBUser         string
 	DBPass         string
 	DBName         string
+	DBSSLMode      string
+	MigrationDir  string
 	DBMaxOpenConns int
 	DBMaxIdleConns int
-	BaseURL        string
 }
 
 const (
 	DefaultHTTPPort       = "8080"
+	DefaultLogFormat      = "text"
 	DefaultDBPort         = "5432"
+	DefaultSSLMode        = "disable"
+	DefaultMigrationDir   = "migrations"
 	DefaultDBMaxOpenConns = 25
 	DefaultDBMaxIdleConns = 10
 )
@@ -32,8 +38,17 @@ func (cfg *Config) applyDefaults() {
 	if cfg.HTTPPort == "" {
 		cfg.HTTPPort = DefaultHTTPPort
 	}
+	if cfg.LogFormat == "" {
+		cfg.LogFormat = DefaultLogFormat
+	}
 	if cfg.DBPort == "" {
 		cfg.DBPort = DefaultDBPort
+	}
+	if cfg.DBSSLMode == "" {
+		cfg.DBSSLMode = DefaultSSLMode
+	}
+	if cfg.MigrationDir == "" {
+		cfg.MigrationDir = DefaultMigrationDir
 	}
 	if cfg.DBMaxOpenConns == 0 {
 		cfg.DBMaxOpenConns = DefaultDBMaxOpenConns
@@ -69,9 +84,9 @@ func (cfg *Config) validate() error {
 }
 
 func (cfg *Config) DSN() string {
-	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
-		cfg.DBUser, cfg.DBPass, cfg.DBHost, cfg.DBPort, cfg.DBName,
-	)
+    return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
+        cfg.DBUser, cfg.DBPass, cfg.DBHost, cfg.DBPort, cfg.DBName, cfg.DBSSLMode,
+    )
 }
 
 func Load(path string) (*Config, error) {
@@ -84,12 +99,15 @@ func Load(path string) (*Config, error) {
 
 	cfg := &Config{
 		HTTPPort: os.Getenv("HTTP_PORT"),
+		LogFormat: os.Getenv("LOG_FORMAT"),
+		BaseURL:  os.Getenv("BASE_URL"),
 		DBHost:   os.Getenv("DB_HOST"),
 		DBPort:   os.Getenv("DB_PORT"),
 		DBUser:   os.Getenv("DB_USER"),
 		DBPass:   os.Getenv("DB_PASSWORD"),
 		DBName:   os.Getenv("DB_NAME"),
-		BaseURL:  os.Getenv("BASE_URL"),
+		DBSSLMode: os.Getenv("DB_SSL_MODE"),
+		MigrationDir: os.Getenv("MIGRATION_DIR"),
 	}
 
 	var err error

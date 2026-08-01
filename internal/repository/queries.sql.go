@@ -21,7 +21,7 @@ type CreateLinkParams struct {
 }
 
 func (q *Queries) CreateLink(ctx context.Context, arg CreateLinkParams) (Link, error) {
-	row := q.db.QueryRowContext(ctx, createLink, arg.ShortCode, arg.OriginalUrl)
+	row := q.db.QueryRow(ctx, createLink, arg.ShortCode, arg.OriginalUrl)
 	var i Link
 	err := row.Scan(
 		&i.ID,
@@ -46,7 +46,7 @@ type GetClicksByDayRow struct {
 }
 
 func (q *Queries) GetClicksByDay(ctx context.Context, linkID int32) ([]GetClicksByDayRow, error) {
-	rows, err := q.db.QueryContext(ctx, getClicksByDay, linkID)
+	rows, err := q.db.Query(ctx, getClicksByDay, linkID)
 	if err != nil {
 		return nil, err
 	}
@@ -58,9 +58,6 @@ func (q *Queries) GetClicksByDay(ctx context.Context, linkID int32) ([]GetClicks
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -82,7 +79,7 @@ type GetClicksByMonthRow struct {
 }
 
 func (q *Queries) GetClicksByMonth(ctx context.Context, linkID int32) ([]GetClicksByMonthRow, error) {
-	rows, err := q.db.QueryContext(ctx, getClicksByMonth, linkID)
+	rows, err := q.db.Query(ctx, getClicksByMonth, linkID)
 	if err != nil {
 		return nil, err
 	}
@@ -94,9 +91,6 @@ func (q *Queries) GetClicksByMonth(ctx context.Context, linkID int32) ([]GetClic
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -111,7 +105,7 @@ WHERE original_url = $1
 `
 
 func (q *Queries) GetLinkByOriginalURL(ctx context.Context, originalUrl string) (Link, error) {
-	row := q.db.QueryRowContext(ctx, getLinkByOriginalURL, originalUrl)
+	row := q.db.QueryRow(ctx, getLinkByOriginalURL, originalUrl)
 	var i Link
 	err := row.Scan(
 		&i.ID,
@@ -129,7 +123,7 @@ WHERE short_code = $1
 `
 
 func (q *Queries) GetLinkByShortCode(ctx context.Context, shortCode string) (Link, error) {
-	row := q.db.QueryRowContext(ctx, getLinkByShortCode, shortCode)
+	row := q.db.QueryRow(ctx, getLinkByShortCode, shortCode)
 	var i Link
 	err := row.Scan(
 		&i.ID,
@@ -147,7 +141,7 @@ WHERE link_id = $1
 `
 
 func (q *Queries) GetTotalClicks(ctx context.Context, linkID int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getTotalClicks, linkID)
+	row := q.db.QueryRow(ctx, getTotalClicks, linkID)
 	var total int32
 	err := row.Scan(&total)
 	return total, err
@@ -165,6 +159,6 @@ type RecordClickParams struct {
 }
 
 func (q *Queries) RecordClick(ctx context.Context, arg RecordClickParams) error {
-	_, err := q.db.ExecContext(ctx, recordClick, arg.LinkID, arg.UserAgent, arg.Ip)
+	_, err := q.db.Exec(ctx, recordClick, arg.LinkID, arg.UserAgent, arg.Ip)
 	return err
 }
