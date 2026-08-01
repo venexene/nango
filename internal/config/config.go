@@ -94,16 +94,18 @@ func Load(path string) (*Config, error) {
 
 	var err error
 
-	maxOpenConnsRaw := os.Getenv("DB_MAX_OPEN_CONNECTIONS")
-	cfg.DBMaxOpenConns, err = strconv.Atoi(maxOpenConnsRaw)
-	if err != nil {
-		slog.Warn("DB_MAX_OPEN_CONNECTIONS must be a number", "error", err)
+	if raw := os.Getenv("DB_MAX_OPEN_CONNECTIONS"); raw != "" {
+		cfg.DBMaxOpenConns, err = strconv.Atoi(raw)
+		if err != nil {
+			slog.Warn("DB_MAX_OPEN_CONNECTIONS must be a number", "error", err)
+		}
 	}
 
-	maxIdleConnsRaw := os.Getenv("DB_MAX_IDLE_CONNECTIONS")
-	cfg.DBMaxIdleConns, err = strconv.Atoi(maxIdleConnsRaw)
-	if err != nil {
-		slog.Warn("DB_MAX_IDLE_CONNECTIONS must be a number", "error", err)
+	if raw := os.Getenv("DB_MAX_IDLE_CONNECTIONS"); raw != "" {
+		cfg.DBMaxIdleConns, err = strconv.Atoi(raw)
+		if err != nil {
+			slog.Warn("DB_MAX_IDLE_CONNECTIONS must be a number", "error", err)
+		}
 	}
 
 	cfg.applyDefaults()
