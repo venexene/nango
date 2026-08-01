@@ -11,9 +11,15 @@ import (
 )
 
 type Repository struct {
-	querier       Querier
+	Querier
 	pool          *pgxpool.Pool
 	migrationPath string
+}
+
+type Interface interface {
+	Querier
+	RunMigrations() error
+	Close()
 }
 
 func NewRepository(ctx context.Context, cfg *config.Config) (*Repository, error) {
@@ -25,7 +31,7 @@ func NewRepository(ctx context.Context, cfg *config.Config) (*Repository, error)
 	querier := New(pool)
 
 	return &Repository{
-		querier:       querier,
+		Querier:       querier,
 		pool:          pool,
 		migrationPath: cfg.MigrationDir,
 	}, nil

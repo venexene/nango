@@ -13,15 +13,17 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/venexene/nango/internal/config"
+	"github.com/venexene/nango/internal/handler"
 	"github.com/venexene/nango/internal/repository"
 )
 
 type Dependencies struct {
 	Config     *config.Config
 	Logger     *slog.Logger
-	Repository *repository.Repository
+	Repository repository.Interface
 	Router     *gin.Engine
 	Server     *http.Server
+	Handler    *handler.Handler
 }
 
 func Run() error {
@@ -108,7 +110,9 @@ func Run() error {
 func createRouter(dep *Dependencies) (*gin.Engine, error) {
 	router := gin.Default()
 
-	// Routers
+	dep.Handler = handler.NewHandler(dep.Repository, dep.Logger, dep.Config)
+
+	router.POST("/shorten", dep.Handler.ShortenHandle)
 
 	return router, nil
 }
