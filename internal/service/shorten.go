@@ -3,9 +3,10 @@ package service
 import (
 	"context"
 	"crypto/rand"
-	"database/sql"
 	"fmt"
 	"time"
+
+	"github.com/jackc/pgx/v5"
 
 	"github.com/venexene/nango/internal/repository"
 )
@@ -38,7 +39,7 @@ func GenerateUniqueShortCode(ctx context.Context, repo repository.Interface) (st
         }
 
         _, err = repo.GetLinkByShortCode(ctx, code)
-        if err == sql.ErrNoRows {
+        if err == pgx.ErrNoRows {
             return code, nil
         }
         if err != nil {

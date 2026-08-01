@@ -3,7 +3,10 @@ package repository
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -62,7 +65,12 @@ func CreatePool(ctx context.Context, cfg *config.Config) (*pgxpool.Pool, error) 
 func (r *Repository) RunMigrations() error {
 	connStr := r.pool.Config().ConnConfig.ConnString()
 
-	m, err := migrate.New(fmt.Sprintf("file://%s", r.migrationPath), connStr)
+	absPath, err := filepath.Abs(r.migrationPath)
+    if err != nil {
+        return fmt.Errorf("failed to get absolute migration path: %w", err)
+    }
+
+	m, err := migrate.New(fmt.Sprintf("file://%s", absPath), connStr)
 	if err != nil {
 		return fmt.Errorf("failed to init migrate: %w", err)
 	}
