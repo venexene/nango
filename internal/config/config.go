@@ -11,7 +11,7 @@ import (
 
 type Config struct {
 	HTTPPort       string
-	LogFormat	   string
+	LogFormat      string
 	BaseURL        string
 	DBHost         string
 	DBPort         string
@@ -19,7 +19,7 @@ type Config struct {
 	DBPass         string
 	DBName         string
 	DBSSLMode      string
-	MigrationDir  string
+	MigrationDir   string
 	DBMaxOpenConns int
 	DBMaxIdleConns int
 }
@@ -84,9 +84,9 @@ func (cfg *Config) validate() error {
 }
 
 func (cfg *Config) DSN() string {
-    return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
-        cfg.DBUser, cfg.DBPass, cfg.DBHost, cfg.DBPort, cfg.DBName, cfg.DBSSLMode,
-    )
+	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
+		cfg.DBUser, cfg.DBPass, cfg.DBHost, cfg.DBPort, cfg.DBName, cfg.DBSSLMode,
+	)
 }
 
 func Load(path string) (*Config, error) {
@@ -98,15 +98,15 @@ func Load(path string) (*Config, error) {
 	}
 
 	cfg := &Config{
-		HTTPPort: os.Getenv("HTTP_PORT"),
-		LogFormat: os.Getenv("LOG_FORMAT"),
-		BaseURL:  os.Getenv("BASE_URL"),
-		DBHost:   os.Getenv("DB_HOST"),
-		DBPort:   os.Getenv("DB_PORT"),
-		DBUser:   os.Getenv("DB_USER"),
-		DBPass:   os.Getenv("DB_PASSWORD"),
-		DBName:   os.Getenv("DB_NAME"),
-		DBSSLMode: os.Getenv("DB_SSL_MODE"),
+		HTTPPort:     os.Getenv("HTTP_PORT"),
+		LogFormat:    os.Getenv("LOG_FORMAT"),
+		BaseURL:      os.Getenv("BASE_URL"),
+		DBHost:       os.Getenv("DB_HOST"),
+		DBPort:       os.Getenv("DB_PORT"),
+		DBUser:       os.Getenv("DB_USER"),
+		DBPass:       os.Getenv("DB_PASSWORD"),
+		DBName:       os.Getenv("DB_NAME"),
+		DBSSLMode:    os.Getenv("DB_SSL_MODE"),
 		MigrationDir: os.Getenv("MIGRATION_DIR"),
 	}
 

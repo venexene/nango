@@ -4,15 +4,15 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/golang-migrate/migrate/v4"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/venexene/nango/internal/config"
 )
 
 type Repository struct {
-	querier		  Querier
-	pool 		  *pgxpool.Pool
+	querier       Querier
+	pool          *pgxpool.Pool
 	migrationPath string
 }
 
@@ -25,12 +25,11 @@ func NewRepository(ctx context.Context, cfg *config.Config) (*Repository, error)
 	querier := New(pool)
 
 	return &Repository{
-		querier:          querier,
-		pool:			  pool,
-		migrationPath:	  cfg.MigrationDir,
+		querier:       querier,
+		pool:          pool,
+		migrationPath: cfg.MigrationDir,
 	}, nil
 }
-
 
 func CreatePool(ctx context.Context, cfg *config.Config) (*pgxpool.Pool, error) {
 	poolConfig, err := pgxpool.ParseConfig(cfg.DSN())
