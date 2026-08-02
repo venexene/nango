@@ -14,13 +14,13 @@ func Redirect(ctx context.Context, shortCode string, repo repository.Interface) 
 		return "", 0, fmt.Errorf("failed to find short code in repository: %w", err)
 	}
 
-	return link.OriginalUrl, int32(link.ID), nil
+	return link.OriginalUrl, link.ID, nil
 }
 
 // RecordClick persists a click event with user agent and IP information.
-func RecordClick(ctx context.Context, linkId int32, userAgent string, ip string, repo repository.Interface) error {
+func RecordClick(ctx context.Context, linkID int32, userAgent string, ip string, repo repository.Interface) error {
 	params := repository.RecordClickParams{
-		LinkID:    linkId,
+		LinkID:    linkID,
 		UserAgent: userAgent,
 		Ip:        ip,
 	}

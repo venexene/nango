@@ -20,7 +20,7 @@ func (h *Handler) RedirectHandle(c *gin.Context) {
 		return
 	}
 
-	originalUrl, id, err := service.Redirect(c.Request.Context(), shortCode, h.repo)
+	originalURL, id, err := service.Redirect(c.Request.Context(), shortCode, h.repo)
 	if err != nil {
 		h.logger.Warn("failed to find link", "error", err)
 		c.JSON(http.StatusNotFound, gin.H{
@@ -35,5 +35,5 @@ func (h *Handler) RedirectHandle(c *gin.Context) {
 		}
 	}()
 
-	c.Redirect(http.StatusMovedPermanently, originalUrl)
+	c.Redirect(http.StatusMovedPermanently, originalURL)
 }

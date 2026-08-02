@@ -9,7 +9,7 @@ import (
 type mockRepo struct {
 	createLinkFn           func(ctx context.Context, arg repository.CreateLinkParams) (repository.Link, error)
 	getLinkByShortCodeFn   func(ctx context.Context, shortCode string) (repository.Link, error)
-	getLinkByOriginalURLFn func(ctx context.Context, originalUrl string) (repository.Link, error)
+	getLinkByOriginalURLFn func(ctx context.Context, originalURL string) (repository.Link, error)
 	recordClickFn          func(ctx context.Context, arg repository.RecordClickParams) error
 	getClicksByDayFn       func(ctx context.Context, linkID int32) ([]repository.GetClicksByDayRow, error)
 	getClicksByMonthFn     func(ctx context.Context, linkID int32) ([]repository.GetClicksByMonthRow, error)
@@ -25,8 +25,8 @@ func (m *mockRepo) GetLinkByShortCode(ctx context.Context, shortCode string) (re
 	return m.getLinkByShortCodeFn(ctx, shortCode)
 }
 
-func (m *mockRepo) GetLinkByOriginalURL(ctx context.Context, originalUrl string) (repository.Link, error) {
-	return m.getLinkByOriginalURLFn(ctx, originalUrl)
+func (m *mockRepo) GetLinkByOriginalURL(ctx context.Context, originalURL string) (repository.Link, error) {
+	return m.getLinkByOriginalURLFn(ctx, originalURL)
 }
 
 func (m *mockRepo) RecordClick(ctx context.Context, arg repository.RecordClickParams) error {

@@ -24,19 +24,14 @@ func newTestHandler(repo repository.Interface) *Handler {
 	return NewHandler(repo, logger, &config.Config{BaseURL: "http://localhost:8080"})
 }
 
-func newTestHandlerWithConfig(repo repository.Interface, cfg *config.Config) *Handler {
-	logger := slog.New(slog.NewTextHandler(os.Stderr, nil))
-	return NewHandler(repo, logger, cfg)
-}
-
 func TestShortenHandle_Success(t *testing.T) {
 	t.Parallel()
 
 	repo := &handlerMockRepo{
-		getLinkByOriginalURLFn: func(originalUrl string) (repository.Link, error) {
+		getLinkByOriginalURLFn: func(_ string) (repository.Link, error) {
 			return repository.Link{}, errNoRows
 		},
-		getLinkByShortCodeFn: func(shortCode string) (repository.Link, error) {
+		getLinkByShortCodeFn: func(_ string) (repository.Link, error) {
 			return repository.Link{}, errNoRows
 		},
 		createLinkFn: func(arg repository.CreateLinkParams) (repository.Link, error) {
@@ -78,7 +73,7 @@ func TestShortenHandle_Duplicate(t *testing.T) {
 	t.Parallel()
 
 	repo := &handlerMockRepo{
-		getLinkByOriginalURLFn: func(originalUrl string) (repository.Link, error) {
+		getLinkByOriginalURLFn: func(_ string) (repository.Link, error) {
 			return repository.Link{
 				ID:          5,
 				ShortCode:   "abc1234",
@@ -161,14 +156,14 @@ func TestRedirectHandle_Success(t *testing.T) {
 	t.Parallel()
 
 	repo := &handlerMockRepo{
-		getLinkByShortCodeFn: func(shortCode string) (repository.Link, error) {
+		getLinkByShortCodeFn: func(_ string) (repository.Link, error) {
 			return repository.Link{
 				ID:          5,
 				ShortCode:   "abc1234",
 				OriginalUrl: "https://example.com",
 			}, nil
 		},
-		recordClickFn: func(arg repository.RecordClickParams) error {
+		recordClickFn: func(_ repository.RecordClickParams) error {
 			return nil
 		},
 	}
@@ -194,7 +189,7 @@ func TestRedirectHandle_NotFound(t *testing.T) {
 	t.Parallel()
 
 	repo := &handlerMockRepo{
-		getLinkByShortCodeFn: func(shortCode string) (repository.Link, error) {
+		getLinkByShortCodeFn: func(_ string) (repository.Link, error) {
 			return repository.Link{}, errNoRows
 		},
 	}
@@ -234,24 +229,24 @@ func TestAnalyticsHandle_Success(t *testing.T) {
 	t.Parallel()
 
 	repo := &handlerMockRepo{
-		getLinkByShortCodeFn: func(shortCode string) (repository.Link, error) {
+		getLinkByShortCodeFn: func(_ string) (repository.Link, error) {
 			return repository.Link{ID: 5, ShortCode: "abc1234"}, nil
 		},
-		getTotalClicksFn: func(linkID int32) (int32, error) {
+		getTotalClicksFn: func(_ int32) (int32, error) {
 			return 42, nil
 		},
-		getClicksByDayFn: func(linkID int32) ([]repository.GetClicksByDayRow, error) {
+		getClicksByDayFn: func(_ int32) ([]repository.GetClicksByDayRow, error) {
 			return []repository.GetClicksByDayRow{
 				{Day: "2026-08-01", Count: 30},
 				{Day: "2026-08-02", Count: 12},
 			}, nil
 		},
-		getClicksByMonthFn: func(linkID int32) ([]repository.GetClicksByMonthRow, error) {
+		getClicksByMonthFn: func(_ int32) ([]repository.GetClicksByMonthRow, error) {
 			return []repository.GetClicksByMonthRow{
 				{Month: "2026-08-01 00:00:00", Count: 42},
 			}, nil
 		},
-		getClicksByUserAgentFn: func(linkID int32) ([]repository.GetClicksByUserAgentRow, error) {
+		getClicksByUserAgentFn: func(_ int32) ([]repository.GetClicksByUserAgentRow, error) {
 			return []repository.GetClicksByUserAgentRow{
 				{UserAgent: "Chrome", Count: 30},
 				{UserAgent: "Safari", Count: 12},
@@ -283,7 +278,7 @@ func TestAnalyticsHandle_NotFound(t *testing.T) {
 	t.Parallel()
 
 	repo := &handlerMockRepo{
-		getLinkByShortCodeFn: func(shortCode string) (repository.Link, error) {
+		getLinkByShortCodeFn: func(_ string) (repository.Link, error) {
 			return repository.Link{}, errNoRows
 		},
 	}
@@ -331,10 +326,10 @@ func BenchmarkShortenHandle(b *testing.B) {
 	gin.SetMode(gin.TestMode)
 
 	repo := &handlerMockRepo{
-		getLinkByOriginalURLFn: func(originalUrl string) (repository.Link, error) {
+		getLinkByOriginalURLFn: func(_ string) (repository.Link, error) {
 			return repository.Link{}, errNoRows
 		},
-		getLinkByShortCodeFn: func(shortCode string) (repository.Link, error) {
+		getLinkByShortCodeFn: func(_ string) (repository.Link, error) {
 			return repository.Link{}, errNoRows
 		},
 		createLinkFn: func(arg repository.CreateLinkParams) (repository.Link, error) {

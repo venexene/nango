@@ -1,3 +1,4 @@
+// Binary shortener serves the URL shortening API.
 package main
 
 import (

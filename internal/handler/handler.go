@@ -1,3 +1,4 @@
+// Package handler implements HTTP handlers for the Shortener API.
 package handler
 
 import (
@@ -9,7 +10,6 @@ import (
 	"github.com/venexene/nango/internal/config"
 	"github.com/venexene/nango/internal/repository"
 )
-
 
 // Handler holds HTTP handler methods for the Shortener API.
 type Handler struct {

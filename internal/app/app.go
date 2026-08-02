@@ -1,3 +1,5 @@
+// Package app wires dependencies, runs migrations, starts the HTTP server,
+// and handles graceful shutdown.
 package app
 
 import (

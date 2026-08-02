@@ -1,3 +1,5 @@
+// Package repository manages the PostgreSQL connection pool, runs database
+// migrations, and provides sqlc-generated type-safe query methods.
 package repository
 
 import (
@@ -6,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/golang-migrate/migrate/v4"
+	// Register database and file source drivers for golang-migrate.
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jackc/pgx/v5/pgxpool"

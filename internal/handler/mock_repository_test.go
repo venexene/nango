@@ -36,11 +36,11 @@ func (m *handlerMockRepo) GetLinkByShortCode(_ context.Context, shortCode string
 	return m.getLinkByShortCodeFn(shortCode)
 }
 
-func (m *handlerMockRepo) GetLinkByOriginalURL(_ context.Context, originalUrl string) (repository.Link, error) {
+func (m *handlerMockRepo) GetLinkByOriginalURL(_ context.Context, originalURL string) (repository.Link, error) {
 	if m.getLinkByOriginalURLFn == nil {
 		return repository.Link{}, errors.New("GetLinkByOriginalURL not mocked")
 	}
-	return m.getLinkByOriginalURLFn(originalUrl)
+	return m.getLinkByOriginalURLFn(originalURL)
 }
 
 func (m *handlerMockRepo) RecordClick(_ context.Context, arg repository.RecordClickParams) error {

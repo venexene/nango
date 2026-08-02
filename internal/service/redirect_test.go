@@ -179,7 +179,7 @@ func TestRecordClick(t *testing.T) {
 
 var _ repository.Interface = (*mockRepo)(nil)
 
-func TestMockRepoImplementsInterface(t *testing.T) {
+func TestMockRepoImplementsInterface(_ *testing.T) {
 	_ = repository.Interface(&mockRepo{
 		createLinkFn: func(ctx context.Context, arg repository.CreateLinkParams) (repository.Link, error) {
 			return repository.Link{}, nil

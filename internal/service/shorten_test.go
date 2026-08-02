@@ -61,13 +61,13 @@ func TestShortenURL(t *testing.T) {
 			name: "new URL creates short link",
 			setupMock: func() *mockRepo {
 				return &mockRepo{
-					getLinkByOriginalURLFn: func(ctx context.Context, url string) (repository.Link, error) {
+					getLinkByOriginalURLFn: func(_ context.Context, url string) (repository.Link, error) {
 						return repository.Link{}, pgx.ErrNoRows
 					},
-					getLinkByShortCodeFn: func(ctx context.Context, code string) (repository.Link, error) {
+					getLinkByShortCodeFn: func(_ context.Context, code string) (repository.Link, error) {
 						return repository.Link{}, pgx.ErrNoRows
 					},
-					createLinkFn: func(ctx context.Context, arg repository.CreateLinkParams) (repository.Link, error) {
+					createLinkFn: func(_ context.Context, arg repository.CreateLinkParams) (repository.Link, error) {
 						return repository.Link{
 							ID:          1,
 							ShortCode:   arg.ShortCode,
@@ -80,8 +80,8 @@ func TestShortenURL(t *testing.T) {
 			wantIsNew: true,
 			wantErr:   false,
 			checkResult: func(t *testing.T, r *ShortenResult) {
-				if r.OriginalUrl != originalURL {
-					t.Errorf("OriginalUrl = %q, want %q", r.OriginalUrl, originalURL)
+				if r.OriginalURL != originalURL {
+					t.Errorf("OriginalUrl = %q, want %q", r.OriginalURL, originalURL)
 				}
 				if len(r.ShortCode) != 7 {
 					t.Errorf("ShortCode length = %d, want 7", len(r.ShortCode))
@@ -95,7 +95,7 @@ func TestShortenURL(t *testing.T) {
 			name: "existing URL returns existing link",
 			setupMock: func() *mockRepo {
 				return &mockRepo{
-					getLinkByOriginalURLFn: func(ctx context.Context, url string) (repository.Link, error) {
+					getLinkByOriginalURLFn: func(_ context.Context, url string) (repository.Link, error) {
 						return repository.Link{
 							ID:          5,
 							ShortCode:   "abc1234",
@@ -123,13 +123,13 @@ func TestShortenURL(t *testing.T) {
 			name: "DB error on create returns error",
 			setupMock: func() *mockRepo {
 				return &mockRepo{
-					getLinkByOriginalURLFn: func(ctx context.Context, url string) (repository.Link, error) {
+					getLinkByOriginalURLFn: func(_ context.Context, url string) (repository.Link, error) {
 						return repository.Link{}, pgx.ErrNoRows
 					},
-					getLinkByShortCodeFn: func(ctx context.Context, code string) (repository.Link, error) {
+					getLinkByShortCodeFn: func(_ context.Context, code string) (repository.Link, error) {
 						return repository.Link{}, pgx.ErrNoRows
 					},
-					createLinkFn: func(ctx context.Context, arg repository.CreateLinkParams) (repository.Link, error) {
+					createLinkFn: func(_ context.Context, arg repository.CreateLinkParams) (repository.Link, error) {
 						return repository.Link{}, fmt.Errorf("connection refused")
 					},
 				}
@@ -142,10 +142,10 @@ func TestShortenURL(t *testing.T) {
 			name: "all generated codes taken returns error",
 			setupMock: func() *mockRepo {
 				return &mockRepo{
-					getLinkByOriginalURLFn: func(ctx context.Context, url string) (repository.Link, error) {
+					getLinkByOriginalURLFn: func(_ context.Context, url string) (repository.Link, error) {
 						return repository.Link{}, pgx.ErrNoRows
 					},
-					getLinkByShortCodeFn: func(ctx context.Context, code string) (repository.Link, error) {
+					getLinkByShortCodeFn: func(_ context.Context, code string) (repository.Link, error) {
 						return repository.Link{
 							ShortCode: code,
 						}, nil // все коды заняты
@@ -179,9 +179,6 @@ func TestShortenURL(t *testing.T) {
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
-			if result == nil {
-				t.Fatal("expected result, got nil")
-			}
 			if result.IsNew != tt.wantIsNew {
 				t.Errorf("IsNew = %v, want %v", result.IsNew, tt.wantIsNew)
 			}
@@ -195,7 +192,7 @@ func TestGenerateUniqueShortCode_Collision(t *testing.T) {
 
 	callCount := 0
 	repo := &mockRepo{
-		getLinkByShortCodeFn: func(ctx context.Context, code string) (repository.Link, error) {
+		getLinkByShortCodeFn: func(_ context.Context, code string) (repository.Link, error) {
 			callCount++
 			if callCount < 3 {
 				return repository.Link{ShortCode: code}, nil // занят

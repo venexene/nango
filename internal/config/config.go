@@ -1,3 +1,5 @@
+// Package config loads application settings from .env and OS environment,
+// applies defaults, and validates required fields.
 package config
 
 import (

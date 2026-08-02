@@ -54,17 +54,17 @@ func GenerateUniqueShortCode(ctx context.Context, repo repository.Interface) (st
 type ShortenResult struct {
 	ShortCode   string
 	ShortURL    string
-	OriginalUrl string
+	OriginalURL string
 	CreatedAt   time.Time
 	IsNew       bool
 }
 
 // ShortenURL creates a short link for the given URL.
 func ShortenURL(ctx context.Context, url string, baseURL string, repo repository.Interface) (*ShortenResult, error) {
-	result := &ShortenResult{OriginalUrl: url}
+	result := &ShortenResult{OriginalURL: url}
 	var err error
 
-	if link, err := repo.GetLinkByOriginalURL(ctx, result.OriginalUrl); err == nil {
+	if link, err := repo.GetLinkByOriginalURL(ctx, result.OriginalURL); err == nil {
 		result.ShortCode = link.ShortCode
 		result.ShortURL = fmt.Sprintf("%s/s/%s", baseURL, result.ShortCode)
 		result.CreatedAt = link.CreatedAt.Time
@@ -79,7 +79,7 @@ func ShortenURL(ctx context.Context, url string, baseURL string, repo repository
 
 	params := repository.CreateLinkParams{
 		ShortCode:   result.ShortCode,
-		OriginalUrl: result.OriginalUrl,
+		OriginalUrl: result.OriginalURL,
 	}
 
 	link, err := repo.CreateLink(ctx, params)
