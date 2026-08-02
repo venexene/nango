@@ -8,7 +8,7 @@ URL shortener with click analytics. PostgreSQL persistence, type-safe SQL codege
 
 ## Tech Stack
 
-**Go** · **Gin** · **PostgreSQL** · **sqlc** · **pgx** · **Docker** · **golang-migrate**
+**Go** · **Gin** · **PostgreSQL** · **sqlc** · **pgx** · **Docker** · **golang-migrate** · **GitHub Actions**
 
 ## Architecture
 
@@ -93,18 +93,23 @@ Database migrations run at startup via `golang-migrate`. Clicks are recorded asy
 ## Testing
 
 ```bash
-go test ./internal/... -count=1 -short
+make test                         # unit + integration tests with race detector
+make lint                         # golangci-lint (revive, staticcheck, gocritic, errcheck)
 ```
 
-- **Service layer**: table-driven unit tests with mocked repository
+- **Service layer**: table-driven unit tests with mocked `repository.Interface`
 - **Handlers**: integration tests with `httptest` and Gin test mode
 - **Config**: validation, defaults, DSN generation
 
 ## Development
 
 ```
-docker compose up -d           # start PostgreSQL
-go run ./cmd/server            # start the server
-docker compose down            # stop containers
-go test ./internal/...         # run all tests
+make up          # build and start all services
+make down        # stop containers
+make clean-db    # stop containers and remove database volumes
+make run         # run the server locally (requires PostgreSQL)
+make test        # run tests with race detection
+make lint        # run golangci-lint
+make build       # build binary
+make gen         # regenerate sqlc code
 ```
