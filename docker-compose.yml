@@ -18,6 +18,38 @@ services:
     ports:
       - "${DB_PORT}:5432"
 
+  app:
+    build:
+      context: .
+    container_name: nango-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/health/live || exit 1"]
+      interval: 10s
+      timeout: 8s
+      retries: 3
+      start_period: 10s
+    environment:
+        - HTTP_PORT=8080
+        - LOG_FORMAT=${LOG_FORMAT}
+        - BASE_URL=${BASE_URL}
+        - DB_HOST=postgres
+        - DB_PORT=5432
+        - DB_USER=${DB_USER}
+        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_NAME=${DB_NAME}
+        - DB_SSL_MODE=${DB_SSL_MODE}
+        - MIGRATION_DIR=${MIGRATION_DIR}
+        - DB_MAX_OPEN_CONNECTIONS=${DB_MAX_OPEN_CONNECTIONS}
+        - DB_MAX_IDLE_CONNECTIONS=${DB_MAX_IDLE_CONNECTIONS}
+    ports:
+      - "${HTTP_PORT:-8080}:8080"
+    networks:
+      - urls-network
+    restart: unless-stopped
+
 volumes:
   pg_data:
 
