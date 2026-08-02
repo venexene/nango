@@ -112,7 +112,11 @@ func createRouter(dep *Dependencies) (*gin.Engine, error) {
 
 	dep.Handler = handler.NewHandler(dep.Repository, dep.Logger, dep.Config)
 
+	router.GET("/health/live", dep.Handler.LiveCheckHandle)
+
 	router.POST("/shorten", dep.Handler.ShortenHandle)
+
+	router.GET("/s/:shortCode", dep.Handler.RedirectHandle)
 
 	return router, nil
 }

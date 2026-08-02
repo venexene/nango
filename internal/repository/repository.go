@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
-	"github.com/golang-migrate/migrate/v4"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/venexene/nango/internal/config"
@@ -66,9 +66,9 @@ func (r *Repository) RunMigrations() error {
 	connStr := r.pool.Config().ConnConfig.ConnString()
 
 	absPath, err := filepath.Abs(r.migrationPath)
-    if err != nil {
-        return fmt.Errorf("failed to get absolute migration path: %w", err)
-    }
+	if err != nil {
+		return fmt.Errorf("failed to get absolute migration path: %w", err)
+	}
 
 	m, err := migrate.New(fmt.Sprintf("file://%s", absPath), connStr)
 	if err != nil {

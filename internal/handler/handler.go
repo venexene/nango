@@ -16,16 +16,16 @@ const (
 )
 
 type Handler struct {
-	repo     repository.Interface
-	logger   *slog.Logger
-	cfg   *config.Config
+	repo   repository.Interface
+	logger *slog.Logger
+	cfg    *config.Config
 }
 
 func NewHandler(repo repository.Interface, logger *slog.Logger, cfg *config.Config) *Handler {
 	return &Handler{
-		repo:     repo,
-		logger:   logger,
-		cfg:   cfg,
+		repo:   repo,
+		logger: logger,
+		cfg:    cfg,
 	}
 }
 

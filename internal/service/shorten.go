@@ -13,9 +13,8 @@ import (
 
 const (
 	alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	length = 7
+	length   = 7
 )
-
 
 func GenerateShortCode() (string, error) {
 	bytes := make([]byte, length)
@@ -32,29 +31,29 @@ func GenerateShortCode() (string, error) {
 }
 
 func GenerateUniqueShortCode(ctx context.Context, repo repository.Interface) (string, error) {
-    for attempt := 0; attempt < 5; attempt++ {
-        code, err := GenerateShortCode()
-        if err != nil {
-            return "", err
-        }
+	for attempt := 0; attempt < 5; attempt++ {
+		code, err := GenerateShortCode()
+		if err != nil {
+			return "", err
+		}
 
-        _, err = repo.GetLinkByShortCode(ctx, code)
-        if err == pgx.ErrNoRows {
-            return code, nil
-        }
-        if err != nil {
-            return "", fmt.Errorf("failed to check short code: %w", err)
-        }
-    }
-    return "", fmt.Errorf("failed to generate unique short code after %d attempts", 5)
+		_, err = repo.GetLinkByShortCode(ctx, code)
+		if err == pgx.ErrNoRows {
+			return code, nil
+		}
+		if err != nil {
+			return "", fmt.Errorf("failed to check short code: %w", err)
+		}
+	}
+	return "", fmt.Errorf("failed to generate unique short code after %d attempts", 5)
 }
 
 type ShortenResult struct {
-	ShortCode string
-	ShortURL  string
+	ShortCode   string
+	ShortURL    string
 	OriginalUrl string
-	CreatedAt time.Time
-	IsNew       bool 
+	CreatedAt   time.Time
+	IsNew       bool
 }
 
 func ShortenURL(ctx context.Context, url string, baseURL string, repo repository.Interface) (*ShortenResult, error) {
@@ -67,15 +66,15 @@ func ShortenURL(ctx context.Context, url string, baseURL string, repo repository
 		result.CreatedAt = link.CreatedAt.Time
 		result.IsNew = false
 		return result, nil
-	} 
+	}
 
 	result.ShortCode, err = GenerateUniqueShortCode(ctx, repo)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate short code: %w", err)
 	}
-	
+
 	params := repository.CreateLinkParams{
-		ShortCode: result.ShortCode,
+		ShortCode:   result.ShortCode,
 		OriginalUrl: result.OriginalUrl,
 	}
 

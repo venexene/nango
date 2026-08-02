@@ -9,9 +9,9 @@ import (
 
 func (h *Handler) ShortenHandle(c *gin.Context) {
 	var req struct {
-		URL        string `json:"url" binding:"required,url"`
+		URL string `json:"url" binding:"required,url"`
 	}
-	
+
 	if err := c.ShouldBindJSON(&req); err != nil {
 		h.logger.Error("failed to bind json", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -31,12 +31,12 @@ func (h *Handler) ShortenHandle(c *gin.Context) {
 
 	if shortenResult.IsNew {
 		c.JSON(http.StatusCreated, gin.H{
-			"status": "created",
+			"status":    "created",
 			"short_url": shortenResult.ShortURL,
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"status": "exists",
+			"status":    "exists",
 			"short_url": shortenResult.ShortURL,
 		})
 	}

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"os"
 	"log/slog"
+	"os"
 
 	"github.com/venexene/nango/internal/app"
 )
