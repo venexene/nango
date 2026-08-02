@@ -64,7 +64,7 @@ func TestShortenHandle_Success(t *testing.T) {
 	}
 
 	var resp map[string]any
-	json.NewDecoder(w.Body).Decode(&resp)
+	_ = json.NewDecoder(w.Body).Decode(&resp)
 	if _, ok := resp["short_url"]; !ok {
 		t.Error("response missing short_url")
 	}
@@ -273,7 +273,7 @@ func TestAnalyticsHandle_Success(t *testing.T) {
 	}
 
 	var resp map[string]any
-	json.NewDecoder(w.Body).Decode(&resp)
+	_ = json.NewDecoder(w.Body).Decode(&resp)
 	if resp["total_clicks"] != float64(42) {
 		t.Errorf("total_clicks = %v, want 42", resp["total_clicks"])
 	}
@@ -321,7 +321,7 @@ func TestLiveCheckHandle(t *testing.T) {
 	}
 
 	var resp map[string]string
-	json.NewDecoder(w.Body).Decode(&resp)
+	_ = json.NewDecoder(w.Body).Decode(&resp)
 	if resp["status"] != "UP" {
 		t.Errorf("status = %q, want UP", resp["status"])
 	}

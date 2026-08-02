@@ -234,7 +234,7 @@ DB_MAX_IDLE_CONNECTIONS=8
 
 	// Очищаем переменные окружения, чтобы тест был изолированным
 	for _, k := range []string{"HTTP_PORT", "DB_HOST", "DB_USER", "DB_PASSWORD", "DB_NAME", "BASE_URL", "DB_MAX_OPEN_CONNECTIONS", "DB_MAX_IDLE_CONNECTIONS", "DB_SSL_MODE", "MIGRATION_DIR", "LOG_FORMAT"} {
-		os.Unsetenv(k)
+		_ = os.Unsetenv(k)
 	}
 
 	cfg, err := Load(envPath)
@@ -274,7 +274,7 @@ BASE_URL=http://test.example.com
 	}
 
 	for _, k := range []string{"HTTP_PORT", "DB_PORT", "DB_MAX_OPEN_CONNECTIONS", "DB_MAX_IDLE_CONNECTIONS", "DB_SSL_MODE", "MIGRATION_DIR", "LOG_FORMAT"} {
-		os.Unsetenv(k)
+		_ = os.Unsetenv(k)
 	}
 
 	cfg, err := Load(envPath)
