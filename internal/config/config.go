@@ -9,6 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// Config holds all application configuration loaded from environment.
 type Config struct {
 	HTTPPort       string
 	LogFormat      string
@@ -25,12 +26,19 @@ type Config struct {
 }
 
 const (
-	DefaultHTTPPort       = "8080"
-	DefaultLogFormat      = "text"
-	DefaultDBPort         = "5432"
-	DefaultSSLMode        = "disable"
-	DefaultMigrationDir   = "migrations"
+	// DefaultHTTPPort is the default listen port for the HTTP server.
+	DefaultHTTPPort = "8080"
+	// DefaultLogFormat is the default log output format ("text" or "json").
+	DefaultLogFormat = "text"
+	// DefaultDBPort is the default PostgreSQL port.
+	DefaultDBPort = "5432"
+	// DefaultSSLMode is the default PostgreSQL SSL mode.
+	DefaultSSLMode = "disable"
+	// DefaultMigrationDir is the default path to SQL migration files.
+	DefaultMigrationDir = "migrations"
+	// DefaultDBMaxOpenConns is the default maximum number of open database connections.
 	DefaultDBMaxOpenConns = 25
+	// DefaultDBMaxIdleConns is the default maximum number of idle database connections.
 	DefaultDBMaxIdleConns = 10
 )
 
@@ -83,12 +91,14 @@ func (cfg *Config) validate() error {
 	return nil
 }
 
+// DSN returns the PostgreSQL connection string in URI format.
 func (cfg *Config) DSN() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
 		cfg.DBUser, cfg.DBPass, cfg.DBHost, cfg.DBPort, cfg.DBName, cfg.DBSSLMode,
 	)
 }
 
+// Load reads configuration from the .env file at path and applies defaults.
 func Load(path string) (*Config, error) {
 	if err := godotenv.Load(path); err != nil {
 		if !os.IsNotExist(err) {

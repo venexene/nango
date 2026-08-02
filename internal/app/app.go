@@ -17,6 +17,7 @@ import (
 	"github.com/venexene/nango/internal/repository"
 )
 
+// Dependencies holds all application-wide components for dependency injection.
 type Dependencies struct {
 	Config     *config.Config
 	Logger     *slog.Logger
@@ -26,6 +27,7 @@ type Dependencies struct {
 	Handler    *handler.Handler
 }
 
+// Run initializes dependencies, runs migrations, starts the HTTP server, and blocks until a shutdown signal is received.
 func Run() error {
 	dep := &Dependencies{}
 	var err error

@@ -16,6 +16,7 @@ const (
 	length   = 7
 )
 
+// GenerateShortCode generates a random 7-character base62 short code.
 func GenerateShortCode() (string, error) {
 	bytes := make([]byte, length)
 
@@ -30,6 +31,7 @@ func GenerateShortCode() (string, error) {
 	return string(bytes), nil
 }
 
+// GenerateUniqueShortCode generates a unique short code.
 func GenerateUniqueShortCode(ctx context.Context, repo repository.Interface) (string, error) {
 	for attempt := 0; attempt < 5; attempt++ {
 		code, err := GenerateShortCode()
@@ -48,6 +50,7 @@ func GenerateUniqueShortCode(ctx context.Context, repo repository.Interface) (st
 	return "", fmt.Errorf("failed to generate unique short code after %d attempts", 5)
 }
 
+// ShortenResult contains the result of a URL shortening operation.
 type ShortenResult struct {
 	ShortCode   string
 	ShortURL    string
@@ -56,6 +59,7 @@ type ShortenResult struct {
 	IsNew       bool
 }
 
+// ShortenURL creates a short link for the given URL.
 func ShortenURL(ctx context.Context, url string, baseURL string, repo repository.Interface) (*ShortenResult, error) {
 	result := &ShortenResult{OriginalUrl: url}
 	var err error

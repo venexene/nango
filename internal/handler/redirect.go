@@ -9,6 +9,7 @@ import (
 	"github.com/venexene/nango/internal/service"
 )
 
+// RedirectHandle looks up the short code from the URL path and redirects to the original URL.
 func (h *Handler) RedirectHandle(c *gin.Context) {
 	shortCode := c.Param("shortCode")
 	if shortCode == "" {

@@ -10,17 +10,15 @@ import (
 	"github.com/venexene/nango/internal/repository"
 )
 
-const (
-	statusDown = "DOWN"
-	statusUp   = "UP"
-)
 
+// Handler holds HTTP handler methods for the Shortener API.
 type Handler struct {
 	repo   repository.Interface
 	logger *slog.Logger
 	cfg    *config.Config
 }
 
+// NewHandler creates a Handler with the given dependencies.
 func NewHandler(repo repository.Interface, logger *slog.Logger, cfg *config.Config) *Handler {
 	return &Handler{
 		repo:   repo,
@@ -29,6 +27,7 @@ func NewHandler(repo repository.Interface, logger *slog.Logger, cfg *config.Conf
 	}
 }
 
+// LiveCheckHandle returns the server health status.
 func (h *Handler) LiveCheckHandle(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": statusUp})
+	c.JSON(http.StatusOK, gin.H{"status": "UP"})
 }

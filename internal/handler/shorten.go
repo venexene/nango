@@ -8,6 +8,7 @@ import (
 	"github.com/venexene/nango/internal/service"
 )
 
+// ShortenHandle creates a short link from a JSON body with a "url" field.
 func (h *Handler) ShortenHandle(c *gin.Context) {
 	var req struct {
 		URL string `json:"url" binding:"required,url"`

@@ -7,11 +7,13 @@ import (
 	"github.com/venexene/nango/internal/repository"
 )
 
+// AnalyticsRecord is a single data point in an analytics aggregation result.
 type AnalyticsRecord struct {
 	Label string `json:"label"`
 	Count int32  `json:"count"`
 }
 
+// AnalyticsResult contains aggregated click data for a short link.
 type AnalyticsResult struct {
 	TotalClicks int32             `json:"total_clicks"`
 	Days        []AnalyticsRecord `json:"days"`
@@ -19,6 +21,7 @@ type AnalyticsResult struct {
 	UserAgents  []AnalyticsRecord `json:"user_agents"`
 }
 
+// Analytics returns click analytics for a short code.
 func Analytics(ctx context.Context, shortCode string, repo repository.Interface) (*AnalyticsResult, error) {
 	result := &AnalyticsResult{}
 

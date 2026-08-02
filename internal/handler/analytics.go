@@ -8,6 +8,7 @@ import (
 	"github.com/venexene/nango/internal/service"
 )
 
+// AnalyticsHandle returns click analytics for a short code.
 func (h *Handler) AnalyticsHandle(c *gin.Context) {
 	shortCode := c.Param("shortCode")
 	if shortCode == "" {

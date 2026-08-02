@@ -204,17 +204,14 @@ func TestValidate(t *testing.T) {
 				if !strings.Contains(err.Error(), tt.errMsg) {
 					t.Errorf("error = %v, want contains %q", err, tt.errMsg)
 				}
-			} else {
-				if err != nil {
-					t.Errorf("unexpected error: %v", err)
-				}
+			} else if err != nil {
+				t.Errorf("unexpected error: %v", err)
 			}
 		})
 	}
 }
 
 func TestLoad_FromFile(t *testing.T) {
-	// не parallel — меняет env
 	dir := t.TempDir()
 	envPath := filepath.Join(dir, ".env.test")
 

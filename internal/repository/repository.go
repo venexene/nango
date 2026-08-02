@@ -13,18 +13,21 @@ import (
 	"github.com/venexene/nango/internal/config"
 )
 
+// Repository wraps a pgxpool connection pool with sqlc-generated Queries and manages database migrations.
 type Repository struct {
 	Querier
 	pool          *pgxpool.Pool
 	migrationPath string
 }
 
+// Interface defines the public API of Repository for use by service layers.
 type Interface interface {
 	Querier
 	RunMigrations() error
 	Close()
 }
 
+// NewRepository creates a connection pool, verifies connectivity, and returns a Repository backed by sqlc-generated queries.
 func NewRepository(ctx context.Context, cfg *config.Config) (*Repository, error) {
 	pool, err := CreatePool(ctx, cfg)
 	if err != nil {
@@ -40,6 +43,7 @@ func NewRepository(ctx context.Context, cfg *config.Config) (*Repository, error)
 	}, nil
 }
 
+// CreatePool creates and configures a pgxpool connection pool.
 func CreatePool(ctx context.Context, cfg *config.Config) (*pgxpool.Pool, error) {
 	poolConfig, err := pgxpool.ParseConfig(cfg.DSN())
 	if err != nil {
@@ -62,6 +66,7 @@ func CreatePool(ctx context.Context, cfg *config.Config) (*pgxpool.Pool, error) 
 	return pool, nil
 }
 
+// RunMigrations applies all pending SQL migrations from the migration directory.
 func (r *Repository) RunMigrations() error {
 	connStr := r.pool.Config().ConnConfig.ConnString()
 
@@ -82,6 +87,7 @@ func (r *Repository) RunMigrations() error {
 	return nil
 }
 
+// Close shuts down the connection pool.
 func (r *Repository) Close() {
 	r.pool.Close()
 }
