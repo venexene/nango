@@ -12,6 +12,7 @@ type Querier interface {
 	CreateLink(ctx context.Context, arg CreateLinkParams) (Link, error)
 	GetClicksByDay(ctx context.Context, linkID int32) ([]GetClicksByDayRow, error)
 	GetClicksByMonth(ctx context.Context, linkID int32) ([]GetClicksByMonthRow, error)
+	GetClicksByUserAgent(ctx context.Context, linkID int32) ([]GetClicksByUserAgentRow, error)
 	GetLinkByOriginalURL(ctx context.Context, originalUrl string) (Link, error)
 	GetLinkByShortCode(ctx context.Context, shortCode string) (Link, error)
 	GetTotalClicks(ctx context.Context, linkID int32) (int32, error)

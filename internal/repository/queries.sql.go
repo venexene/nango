@@ -98,6 +98,39 @@ func (q *Queries) GetClicksByMonth(ctx context.Context, linkID int32) ([]GetClic
 	return items, nil
 }
 
+const getClicksByUserAgent = `-- name: GetClicksByUserAgent :many
+SELECT user_agent, COUNT(*)::INT AS count
+FROM clicks
+WHERE link_id = $1
+GROUP BY user_agent
+ORDER BY count DESC
+`
+
+type GetClicksByUserAgentRow struct {
+	UserAgent string `json:"user_agent"`
+	Count     int32  `json:"count"`
+}
+
+func (q *Queries) GetClicksByUserAgent(ctx context.Context, linkID int32) ([]GetClicksByUserAgentRow, error) {
+	rows, err := q.db.Query(ctx, getClicksByUserAgent, linkID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetClicksByUserAgentRow
+	for rows.Next() {
+		var i GetClicksByUserAgentRow
+		if err := rows.Scan(&i.UserAgent, &i.Count); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getLinkByOriginalURL = `-- name: GetLinkByOriginalURL :one
 SELECT id, short_code, original_url, created_at
 FROM links

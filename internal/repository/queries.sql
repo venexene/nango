@@ -35,3 +35,10 @@ ORDER BY month;
 SELECT COUNT(*)::INT AS total
 FROM clicks
 WHERE link_id = $1;
+
+-- name: GetClicksByUserAgent :many
+SELECT user_agent, COUNT(*)::INT AS count
+FROM clicks
+WHERE link_id = $1
+GROUP BY user_agent
+ORDER BY count DESC;

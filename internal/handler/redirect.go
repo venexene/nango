@@ -5,15 +5,16 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/venexene/nango/internal/service"
 )
 
 func (h *Handler) RedirectHandle(c *gin.Context) {
 	shortCode := c.Param("shortCode")
 	if shortCode == "" {
-		h.logger.Error("short code is required")
+		h.logger.Warn("short code is required")
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error":"short code is required",
+			"error": "short code is required",
 		})
 		return
 	}
@@ -22,7 +23,7 @@ func (h *Handler) RedirectHandle(c *gin.Context) {
 	if err != nil {
 		h.logger.Warn("failed to find link", "error", err)
 		c.JSON(http.StatusNotFound, gin.H{
-			"error":"failed to find link",
+			"error": "failed to find link",
 		})
 		return
 	}

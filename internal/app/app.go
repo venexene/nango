@@ -118,5 +118,7 @@ func createRouter(dep *Dependencies) (*gin.Engine, error) {
 
 	router.GET("/s/:shortCode", dep.Handler.RedirectHandle)
 
+	router.GET("/analytics/:shortCode", dep.Handler.AnalyticsHandle)
+
 	return router, nil
 }

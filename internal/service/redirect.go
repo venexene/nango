@@ -18,10 +18,9 @@ func Redirect(ctx context.Context, shortCode string, repo repository.Interface) 
 
 func RecordClick(ctx context.Context, linkId int32, userAgent string, ip string, repo repository.Interface) error {
 	params := repository.RecordClickParams{
-		LinkID: linkId,
+		LinkID:    linkId,
 		UserAgent: userAgent,
-		Ip: ip,
-
+		Ip:        ip,
 	}
 
 	if err := repo.RecordClick(ctx, params); err != nil {
