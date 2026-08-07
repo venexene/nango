@@ -67,11 +67,7 @@ func Run() error {
 	}
 	dep.Logger.Info("migrated database")
 
-	dep.Router, err = createRouter(dep)
-	if err != nil {
-		dep.Logger.Error("failed to create router", "error", err)
-		return fmt.Errorf("failed to create router: %w", err)
-	}
+	dep.Router = createRouter(dep)
 	dep.Logger.Info("created router")
 
 	dep.Server = &http.Server{
@@ -111,7 +107,7 @@ func Run() error {
 	return nil
 }
 
-func createRouter(dep *Dependencies) (*gin.Engine, error) {
+func createRouter(dep *Dependencies) *gin.Engine {
 	router := gin.Default()
 
 	dep.Handler = handler.NewHandler(dep.Repository, dep.Logger, dep.Config)
@@ -124,5 +120,5 @@ func createRouter(dep *Dependencies) (*gin.Engine, error) {
 
 	router.GET("/analytics/:shortCode", dep.Handler.AnalyticsHandle)
 
-	return router, nil
+	return router
 }

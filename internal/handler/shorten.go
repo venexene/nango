@@ -15,7 +15,6 @@ func (h *Handler) ShortenHandle(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		h.logger.Warn("failed to bind json", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "failed to bind json",
 		})

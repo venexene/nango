@@ -1,4 +1,4 @@
-.PHONY: up down test lint build run clean clean-db
+.PHONY: up down test lint build gen run clean clean-db
 
 help:
 	@echo "Usage: make [target]"

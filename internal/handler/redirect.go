@@ -13,7 +13,6 @@ import (
 func (h *Handler) RedirectHandle(c *gin.Context) {
 	shortCode := c.Param("shortCode")
 	if shortCode == "" {
-		h.logger.Warn("short code is required")
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "short code is required",
 		})

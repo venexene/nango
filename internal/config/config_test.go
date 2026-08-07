@@ -106,7 +106,7 @@ func TestApplyDefaults(t *testing.T) {
 			name: "LogFormat empty gets default",
 			cfg:  Config{},
 			wantFunc: func(cfg Config) bool {
-				return cfg.LogFormat == DefaultLogFormat
+				return cfg.LogFormat == LogFormatText
 			},
 		},
 	}
@@ -144,6 +144,7 @@ func TestValidate(t *testing.T) {
 				BaseURL:        "http://localhost",
 				DBMaxOpenConns: 10,
 				DBMaxIdleConns: 5,
+				LogFormat:      LogFormatText,
 			},
 			wantErr: false,
 		},

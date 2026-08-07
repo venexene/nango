@@ -28,10 +28,12 @@ type Config struct {
 }
 
 const (
+	// LogFormatText is the `text` value of LogFormat
+	LogFormatText = "text"
+	// LogFormatJSON is the `json` value of LogFormat
+	LogFormatJSON = "json"
 	// DefaultHTTPPort is the default listen port for the HTTP server.
 	DefaultHTTPPort = "8080"
-	// DefaultLogFormat is the default log output format ("text" or "json").
-	DefaultLogFormat = "text"
 	// DefaultDBPort is the default PostgreSQL port.
 	DefaultDBPort = "5432"
 	// DefaultSSLMode is the default PostgreSQL SSL mode.
@@ -48,8 +50,8 @@ func (cfg *Config) applyDefaults() {
 	if cfg.HTTPPort == "" {
 		cfg.HTTPPort = DefaultHTTPPort
 	}
-	if cfg.LogFormat == "" {
-		cfg.LogFormat = DefaultLogFormat
+	if cfg.LogFormat != LogFormatJSON && cfg.LogFormat != LogFormatText {
+		cfg.LogFormat = LogFormatText
 	}
 	if cfg.DBPort == "" {
 		cfg.DBPort = DefaultDBPort
